@@ -30,7 +30,6 @@ function createGallery(img) {
 };
   
 new SimpleLightbox(".gallery a", {
-    captions: true,
     captionsData: 'alt',
-    captionDelay: 500,
+    captionDelay: 250,
 });
