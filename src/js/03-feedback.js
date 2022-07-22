@@ -1,102 +1,42 @@
-// import throttle from 'lodash.throttle';
-
-// const CONTACT_FORM_KEY = 'feedback-form-state'
-// const contactFormEl = document.querySelector('.feedback-form');
-// const formData = {};
-
-// const fillContactFormElements = form => {
-//     const formData = JSON.parse(localStorage.getItem(CONTACT_FORM_KEY));
-//     const formElements = form.elements;
-
-//     console.log(formData);
-
-//     for (const key in formData) {
-//         if (formData.hasOwnProperty(key)) {
-//             formElements[key].value = formData[key];
-//         }
-//     }
-// }
-// fillContactFormElements(contactFormEl);
-
-// const onContactFormChange = event => {
-//     const { target } = event;
-
-//     const contactFormValue = target.value;
-//     const contactFormName = target.name;
-
-//     formData[contactFormName] = contactFormValue;
-
-//     localStorage.setItem('feedback-form-state', JSON.stringify(formData));
-// };
-// const onContactFormSubmit = event => {
-//     event.preventDefault();
-//     localStorage.removeItem(CONTACT_FORM_KEY);
-//     event.currentTarget.reset();
-
-//     console.log(formData);
-// }
-// contactFormEl.addEventListener('change', throttle(onContactFormChange, 1000));
-// contactFormEl.addEventListener('submit', onContactFormSubmit);
-
 import throttle from 'lodash.throttle';
 
-const form = document.querySelector('.feedback-form');
-const email = document.querySelector('input');
-const message = document.querySelector('textarea');
+const CONTACT_FORM_KEY = 'feedback-form-state'
+const contactFormEl = document.querySelector('.feedback-form');
+const formData = {};
 
-let formData = {};
+const fillContactFormElements = form => {
+    const formData = JSON.parse(localStorage.getItem(CONTACT_FORM_KEY));
+    const formElements = form.elements;
 
-form.addEventListener('input', inputValue);
-form.addEventListener('submit', onSubmitForm);
+    console.log(formData);
 
-function onFormData(el) {
-  const data = JSON.stringify(formData);
-    if(data) {
-    
-   return localStorage.setItem(el, data);
-  } 
+    for (const key in formData) {
+        if (formData.hasOwnProperty(key)) {
+            formElements[key].value = formData[key];
+        }
+    }
+}
+fillContactFormElements(contactFormEl);
+
+const onContactFormChange = event => {
+    const { target } = event;
+
+    const contactFormValue = target.value;
+    const contactFormName = target.name;
+
+    formData[contactFormName] = contactFormValue;
+
+    localStorage.setItem('feedback-form-state', JSON.stringify(formData));
 };
+const onContactFormSubmit = event => {
+  event.preventDefault();
 
-function dataFromLocalStorage(el) {
-    const data = localStorage.getItem(el);
+  localStorage.removeItem('feedback-form-state');
 
-  if (data === null) {
-   return el = undefined;
-    
-  } else {
-return JSON.parse(data);
-  }
-};
+  contactFormEl.reset();
 
-const objFromLocalStorage = dataFromLocalStorage('feedback-form-state');
-
-if (objFromLocalStorage) {
-  email.value = objFromLocalStorage.email;
-  message.value = objFromLocalStorage.message;
-  formData = objFromLocalStorage;
-} else {
-  email.value = '';
-  message.value = '';
+  console.log(formData);
 }
 
-function onSubmitForm(e) {
-  e.preventDefault();
-  localStorage.removeItem('feedback-form-state');
-  form.reset();
-  console.log(formData);
-};
-
-function inputValue(e) {
-  const {
-    elements: { email, message },
-  } = e.currentTarget;
-
-  if (email.value || message.value) {
-    formData = {
-      email: email.value,
-      message: message.value,
-    };
-
-    throttle(onFormData, 500)('feedback-form-state', formData);
-  }
-};
+contactFormEl.addEventListener('input', throttle(onContactFormChange, 1000));
+contactFormEl.addEventListener('submit', onContactFormSubmit);
