@@ -14,7 +14,18 @@ const onPlayEl = ({ seconds }) => {
 // playerEl.setCurrentTime(localStorage.getItem('videoplayer-current-time'));
 
 playerEl.setCurrentTime(currentTimeEl).then(function (seconds) {
-    seconds = currentTimeEl
-}).catch();
+
+}).catch(function(error) {
+    switch (error.name) {
+        case 'RangeError':
+            // the time was less than 0 or greater than the video’s duration
+            break;
+
+        default:
+            // some other error occurred
+            break;
+    }
+});
+
 
 playerEl.on('timeupdate', throttle(onPlayEl, 500));
